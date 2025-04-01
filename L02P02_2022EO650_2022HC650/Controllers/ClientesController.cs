@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using L02P02_2022EO650_2022HC650.Data;
 using L02P02_2022EO650_2022HC650.Models;
 using System;
-using System.Linq;
 
 namespace L02P02_2022EO650_2022HC650.Controllers
 {
@@ -35,13 +34,13 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 // Guardar el ID del cliente en sesión
                 HttpContext.Session.SetInt32("ClienteId", cliente.Id);
 
-                // Crear pedido en proceso
+                // Crear pedido en proceso con estado 'P'
                 PedidoEncabezado pedido = new PedidoEncabezado
                 {
                     IdCliente = cliente.Id,
                     CantidadLibros = 0,
                     Total = 0,
-                    Estado = 'P'
+                    Estado = 'P'  // 'P' para en proceso
                 };
 
                 _context.PedidoEncabezados.Add(pedido);
@@ -50,9 +49,11 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 // Guardar el ID del pedido en sesión
                 HttpContext.Session.SetInt32("PedidoId", pedido.Id);
 
+                // Redirigir al listado de libros
                 return RedirectToAction("ListaLibros", "Libros");
             }
-            return View(cliente);
+
+            return View(cliente);  // Si el modelo no es válido, devolver el formulario
         }
     }
 }

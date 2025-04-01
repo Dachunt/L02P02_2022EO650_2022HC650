@@ -1,0 +1,22 @@
+﻿@model IEnumerable<L02P02_2022EO650_2022HC650.Models.Libro>
+
+@{
+    ViewData["Title"] = "Listado de Libros";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    @foreach (var libro in Model)
+    {
+        <div class="libro-item">
+            <h4>@libro.Nombre</h4>
+            <p>@libro.Descripcion</p>
+            <p>Precio: @libro.Precio</p>
+            <form asp-action="AgregarAlCarrito" method="post">
+                <input type="hidden" name="libroId" value="@libro.Id" />
+                <button type="submit" class="btn btn-success">Agregar al Carrito</button>
+            </form>
+        </div>
+    }
+</div>

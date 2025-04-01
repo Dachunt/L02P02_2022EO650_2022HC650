@@ -6,40 +6,40 @@ using L02P02_2022EO650_2022HC650.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Agregar los servicios necesarios
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession();
-builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();  // Habilitar las sesiones
+builder.Services.AddDistributedMemoryCache();  // Almacenar las sesiones en memoria
 
 // Configurar la conexión a la base de datos
 builder.Services.AddDbContext<LibreriaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Agrega el servicio de autorización
+// Agregar autorización si se necesita (aunque en este caso no lo especificas)
 builder.Services.AddAuthorization();
 
-// Asegúrate de agregar los controladores
-builder.Services.AddControllersWithViews();
-
 var app = builder.Build();
-builder.Services.AddSession();
+
+// Habilitar el uso de la sesión
 app.UseSession();
 
-// Configure the HTTP request pipeline. 
+// Configuración del middleware de la aplicación
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection();  // Redirección automática a HTTPS
+app.UseStaticFiles();  // Habilitar archivos estáticos como CSS, JS, imágenes, etc.
 
-app.UseRouting();
+app.UseRouting();  // Habilitar el enrutamiento de solicitudes HTTP
 
-app.UseAuthorization();
+app.UseAuthorization();  // Habilitar la autorización si es necesario (aunque no está especificado en este caso)
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Login}/{id?}");
+    pattern: "{controller=Clientes}/{action=Crear}/{id?}");  // Asegúrate de redirigir a "Clientes/Crear" en vez de "Login/Login"
 
+// Ejecutar la aplicación
 app.Run();
