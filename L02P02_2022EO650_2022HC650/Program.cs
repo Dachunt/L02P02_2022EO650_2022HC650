@@ -39,7 +39,7 @@ app.UseAuthorization();  // Habilitar la autorización si es necesario (aunque no
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Clientes}/{action=Crear}/{id?}");  // Asegúrate de redirigir a "Clientes/Crear" en vez de "Login/Login"
+    pattern: "{controller=Libros}/{action=VerCarrito}/{id?}");  // Asegúrate de redirigir a "Clientes/Crear" en vez de "Login/Login"
 
 // Ejecutar la aplicación
 app.Run();
