@@ -14,5 +14,6 @@ namespace L02P02_2022EO650_2022HC650.Data
         public DbSet<PedidoEncabezado> PedidoEncabezados { get; set; }
         public DbSet<PedidoDetalle> PedidoDetalles { get; set; }
         public DbSet<ComentarioLibro> ComentariosLibros { get; set; }
+        public DbSet<Carrito> Carrito { get; set; }
     }
 }

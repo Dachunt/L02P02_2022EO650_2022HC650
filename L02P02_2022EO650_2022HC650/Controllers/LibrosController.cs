@@ -23,39 +23,56 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         }
 
         // Acción para agregar un libro al carrito (pedido)
+        
         [HttpPost]
-        public IActionResult AgregarAlCarrito(int libroId)
+
+        public ActionResult Index()
         {
-            var clienteId = HttpContext.Session.GetInt32("ClienteId");
-            var pedidoId = HttpContext.Session.GetInt32("PedidoId");
+            var libros = _context.Libros.Where(l => l.Estado == 'A').ToList();
+            return View(libros);
+        }
 
-            if (clienteId != null && pedidoId != null)
+        // Agregar libro al carrito
+        [HttpPost]
+        public ActionResult AgregarAlCarrito(int id)
+        {
+            var libro = _context.Libros.Find(id);
+            if (libro == null)
             {
-                // Obtener el libro seleccionado
-                var libro = _context.Libros.Find(libroId);
-                if (libro != null)
-                {
-                    // Aquí podrías agregar lógica para agregar el libro al pedido.
-                    // Ejemplo: Crear un nuevo detalle de pedido
-                    PedidoDetalle detalle = new PedidoDetalle
-                    {
-                        IdPedido = pedidoId.Value,
-                        IdLibro = libro.Id,
-                        CreatedAt = DateTime.Now
-                    };
-
-                    _context.PedidoDetalles.Add(detalle);
-                    _context.SaveChanges();
-
-                    // Actualizar cantidad y total del pedido
-                    var pedido = _context.PedidoEncabezados.Find(pedidoId.Value);
-                    pedido.CantidadLibros += 1;
-                    pedido.Total += libro.Precio;
-                    _context.SaveChanges();
-                }
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("ListaLibros", "Libros");
+            var item = _context.Carrito.FirstOrDefault(c => c.LibroId == id);
+            if (item != null)
+            {
+                item.Cantidad++;
+            }
+            else
+            {
+                _context.Carrito.Add(new Carrito { LibroId = id, Cantidad = 1 });
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // Ver Carrito
+        public ActionResult VerCarrito()
+        {
+            var carrito = _context.Carrito.ToList();
+            var libros = _context.Libros.ToList();
+
+            var carritoViewModel = from c in carrito
+                                   join l in libros on c.LibroId equals l.Id
+                                   select new
+                                   {
+                                       c.Id,
+                                       l.Nombre,
+                                       l.Precio,
+                                       c.Cantidad
+                                   };
+
+            return View(carritoViewModel);
         }
     }
 }
