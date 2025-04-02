@@ -10,7 +10,7 @@
     @foreach (var libro in Model)
     {
         <div class="libro-item">
-            <h4>@libro.Nombre</h4>
+            <h4>@libro.nombre</h4>
             <p>@libro.descripcion</p>
             <p>Precio: @libro.precio</p>
             <form asp-action="AgregarAlCarrito" method="post">
