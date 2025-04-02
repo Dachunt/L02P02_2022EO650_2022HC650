@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using L02P02_2022EO650_2022HC650.Data;
 using L02P02_2022EO650_2022HC650.Models;
 using System.Linq;
+using System;
 
 namespace L02P02_2022EO650_2022HC650.Controllers
 {
@@ -14,37 +16,34 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             _context = context;
         }
 
+        // Mostrar la lista de libros
         public IActionResult ListaLibros()
         {
             var libros = _context.libros.ToList();
-            return View(libros); 
-        }
 
+            // Obtener ID del Cliente desde la sesión
+            int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
 
-        public IActionResult Index()
-        {
-            var libros = _context.libros
-                .Where(l => l.estado == 'A') 
-                .ToList();
-
-            int idCliente = 1;
-            var pedido = _context.pedido_encabezado
-                .FirstOrDefault(p => p.id_cliente == idCliente);
-
-            ViewBag.TotalLibros = pedido?.cantidad_libros ?? 0;
-            ViewBag.TotalPrecio = pedido?.total ?? 0;
+            // Buscar pedido en proceso
+            var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id_cliente == idCliente);
+            if (pedido != null)
+            {
+                HttpContext.Session.SetInt32("TotalLibros", pedido.cantidad_libros);
+                HttpContext.Session.SetInt32("TotalPrecio", (int)pedido.total);
+            }
 
             return View(libros);
         }
 
+        // Agregar un libro al carrito
         [HttpPost]
         public IActionResult AgregarAlCarrito(int idLibro)
         {
-            int idCliente = 1;
+            // Obtener ID del Cliente desde la sesión
+            int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
 
-            var pedido = _context.pedido_encabezado
-                .FirstOrDefault(p => p.id_cliente == idCliente);
-
+            // Buscar pedido en proceso
+            var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id_cliente == idCliente);
             if (pedido == null)
             {
                 pedido = new PedidoEncabezado
@@ -57,6 +56,14 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 _context.SaveChanges();
             }
 
+            // Buscar el libro
+            var libro = _context.libros.Find(idLibro);
+            if (libro == null)
+            {
+                return NotFound("El libro no existe.");
+            }
+
+            // Agregar detalle del pedido
             var detalle = new PedidoDetalle
             {
                 id_pedido = pedido.id,
@@ -66,11 +73,36 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             _context.pedido_detalle.Add(detalle);
             _context.SaveChanges();
 
+            // Actualizar totales
             pedido.cantidad_libros++;
-            pedido.total += _context.libros.Find(idLibro)?.precio ?? 0;
+            pedido.total += libro.precio;
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            // Guardar en sesión
+            HttpContext.Session.SetInt32("TotalLibros", pedido.cantidad_libros);
+            HttpContext.Session.SetInt32("TotalPrecio", (int)pedido.total);
+
+            return RedirectToAction("ListaLibros");
+        }
+
+        // Método para completar la compra
+        public IActionResult CompletarPedido()
+        {
+            int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
+            var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id_cliente == idCliente);
+
+            if (pedido == null || pedido.cantidad_libros == 0)
+            {
+                TempData["MensajeError"] = "No hay libros en el carrito para completar la compra.";
+                return RedirectToAction("ListaLibros");
+            }
+
+            // Limpiar sesión después de completar la compra
+            HttpContext.Session.Remove("TotalLibros");
+            HttpContext.Session.Remove("TotalPrecio");
+
+            TempData["MensajeExito"] = "Compra completada con éxito.";
+            return RedirectToAction("ListaLibros");
         }
     }
 }
