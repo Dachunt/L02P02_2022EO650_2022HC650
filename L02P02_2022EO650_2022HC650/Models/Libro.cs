@@ -5,19 +5,19 @@ namespace L02P02_2022EO650_2022HC650.Models
     public class Libro
     {
         [Key]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [Required]
         [StringLength(255)]
-        public string Nombre { get; set; }
+        public string nombre { get; set; }
 
-        public string Descripcion { get; set; }
-        public string UrlImagen { get; set; }
-        public int IdAutor { get; set; }
-        public int IdCategoria { get; set; }
+        public string descripcion { get; set; }
+        public string url_imagen { get; set; }
+        public int id_autor { get; set; }
+        public int id_categoria { get; set; }
 
         [Required]
-        public decimal Precio { get; set; }
-        public char Estado { get; set; } = 'A';
+        public decimal precio { get; set; }
+        public char estado { get; set; } = 'A';
     }
 }

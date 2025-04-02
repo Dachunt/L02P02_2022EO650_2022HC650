@@ -3,15 +3,18 @@
 *@
 @model IEnumerable<L02P02_2022EO650_2022HC650.Models.Libro>
 
-<h2>Listado de Libros</h2>
+@{
+    ViewBag.Title = "Lista de libros";
+}
+
+<h2>Lista de Libros</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>Imagen</th>
             <th>Nombre</th>
-            <th>Autor</th>
-            <th>Categoría</th>
+            <th>Descripción</th>
             <th>Precio</th>
             <th>Acción</th>
         </tr>
@@ -20,30 +23,21 @@
         @foreach (var libro in Model)
         {
             <tr>
-                <td>
-                    <img src="@libro.UrlImagen" alt="Imagen del libro" width="50" />
-                </td>
+                <td><img src="@libro.url_imagen" alt="@libro.Nombre" width="50" height="75"></td>
                 <td>@libro.Nombre</td>
-                <td>@libro.IdAutor</td>
-                <td>@libro.IdCategoria</td>
-                <td>$@libro.Precio</td>
+                <td>@libro.descripcion</td>
+                <td>$@libro.precio</td>
                 <td>
-                    <form asp-action="AgregarAlCarrito" asp-controller="Libros" method="post">
-                        <input type="hidden" name="idLibro" value="@libro.Id" />
-                        <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
-                    </form>
+                    @using (Html.BeginForm("AgregarAlCarrito", "libros", FormMethod.Post))
+                    {
+                        @Html.Hidden("id", libro.Id)
+                        <button type="submit" class="bin btn-success">Agregar al Carrito</button>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div class="alert alert-info">
-    <strong>Total de Libros en el Carrito: </strong> @ViewBag.TotalLibros <br>
-    <strong>Total a Pagar: </strong> $@ViewBag.TotalPrecio
-</div>
-
-<button class="btn btn-success">Completar Compra</button>
-
-
+<a href="@Url.Action("VerCarrito", "libros")" class="btn btn-primary">Ver Carrito</a>
 

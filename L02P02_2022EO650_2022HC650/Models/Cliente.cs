@@ -26,7 +26,7 @@ namespace L02P02_2022EO650_2022HC650.Models
         [StringLength(255)]
         public string Direccion { get; set; }
 
-        // El campo CreatedAt se maneja desde la base de datos, no necesitamos asignarlo manualmente
+        // El campo created_at se maneja desde la base de datos, no necesitamos asignarlo manualmente
         public DateTime created_at { get; set; } = DateTime.Now;  // Este valor ahora será manejado por la base de datos
     }
 }

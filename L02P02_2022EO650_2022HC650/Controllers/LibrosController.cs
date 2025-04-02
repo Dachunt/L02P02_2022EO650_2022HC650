@@ -24,7 +24,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         public IActionResult Index()
         {
             var libros = _context.libros
-                .Where(l => l.Estado == 'A') 
+                .Where(l => l.estado == 'A') 
                 .ToList();
 
             int idCliente = 1;
@@ -59,15 +59,15 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             var detalle = new PedidoDetalle
             {
-                IdPedido = pedido.id,
-                IdLibro = idLibro,
-                CreatedAt = DateTime.Now
+                id_pedido = pedido.id,
+                id_libro = idLibro,
+                created_at = DateTime.Now
             };
             _context.pedido_detalle.Add(detalle);
             _context.SaveChanges();
 
             pedido.cantidad_libros++;
-            pedido.total += _context.libros.Find(idLibro)?.Precio ?? 0;
+            pedido.total += _context.libros.Find(idLibro)?.precio ?? 0;
             _context.SaveChanges();
 
             return RedirectToAction("Index");

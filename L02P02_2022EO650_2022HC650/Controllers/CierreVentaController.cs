@@ -34,11 +34,11 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             }
 
             var detallePedidos = _context.pedido_detalle
-                                          .Where(pd => pd.IdPedido == pedidoId)
+                                          .Where(pd => pd.id_pedido == pedidoId)
                                           .Select(pd => new DetallePedido
                                           {
                                               NombreLibro = pd.Libro.Nombre,
-                                              Precio = pd.Libro.Precio,
+                                              Precio = pd.Libro.precio,
                                               Cantidad = 1 // Suponemos que cada detalle es de un solo libro
                                           }).ToList();
 

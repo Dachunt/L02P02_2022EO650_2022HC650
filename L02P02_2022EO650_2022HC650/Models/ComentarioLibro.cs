@@ -7,18 +7,18 @@ namespace L02P02_2022EO650_2022HC650.Models
     public class ComentarioLibro
     {
         [Key]
-        public int Id { get; set; }
+        public int id { get; set; }
 
         [ForeignKey("Libro")]
-        public int IdLibro { get; set; }
+        public int id_libro { get; set; }
 
-        public string Comentarios { get; set; }
+        public string comentarios { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Usuario { get; set; }
+        public string usuario { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime created_at { get; set; } = DateTime.Now;
 
         public Libro Libro { get; set; }
     }

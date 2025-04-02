@@ -27,7 +27,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Aquí no necesitamos asignar valores manualmente para 'id' ni 'CreatedAt'
+                // Aquí no necesitamos asignar valores manualmente para 'id' ni 'created_at'
                 _context.clientes.Add(cliente);
                 _context.SaveChanges();
 
