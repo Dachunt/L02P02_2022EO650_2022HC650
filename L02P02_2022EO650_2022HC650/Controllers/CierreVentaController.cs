@@ -1,0 +1,75 @@
+﻿using L02P02_2022EO650_2022HC650.Models;
+using L02P02_2022EO650_2022HC650.Data;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
+namespace L02P02_2022EO650_2022HC650.Controllers
+{
+    public class CierreVentaController : Controller
+    {
+        private readonly LibreriaContext _context;
+
+        public CierreVentaController(LibreriaContext context)
+        {
+            _context = context;
+        }
+
+        // Acción para mostrar el formulario de cierre de venta
+        public IActionResult CierreVenta()
+        {
+            var clienteId = HttpContext.Session.GetInt32("ClienteId");
+            var pedidoId = HttpContext.Session.GetInt32("PedidoId");
+
+            if (clienteId == null || pedidoId == null)
+            {
+                return RedirectToAction("Index", "Home"); // Redirigir si no hay cliente o pedido
+            }
+
+            var cliente = _context.Clientes.Find(clienteId);
+            var pedido = _context.PedidoEncabezados.Find(pedidoId);
+
+            if (cliente == null || pedido == null)
+            {
+                return RedirectToAction("Index", "Home"); // Redirigir si no se encuentra cliente o pedido
+            }
+
+            var detallePedidos = _context.PedidoDetalles
+                                          .Where(pd => pd.IdPedido == pedidoId)
+                                          .Select(pd => new DetallePedido
+                                          {
+                                              NombreLibro = pd.Libro.Nombre,
+                                              Precio = pd.Libro.Precio,
+                                              Cantidad = 1 // Suponemos que cada detalle es de un solo libro
+                                          }).ToList();
+
+            var cierreVenta = new CierreVenta
+            {
+                Nombre = cliente.Nombre,
+                Apellido = cliente.Apellido,
+                Email = cliente.Email,
+                Direccion = cliente.Direccion,
+                DetallePedidos = detallePedidos,
+                Total = detallePedidos.Sum(dp => dp.Precio), // Total calculado
+                PedidoId = pedidoId.Value
+            };
+
+            return View(cierreVenta); // Pasamos el modelo a la vista
+        }
+
+        // Acción para cerrar la venta
+        [HttpPost]
+        public IActionResult CerrarVenta(int pedidoId)
+        {
+            var pedido = _context.PedidoEncabezados.Find(pedidoId);
+
+            if (pedido != null)
+            {
+                pedido.Estado = 'C'; // Cambiar el estado a 'C' (CERRADO)
+                _context.SaveChanges(); // Guardar los cambios en la base de datos
+                TempData["Mensaje"] = "Venta cerrada exitosamente."; // Mensaje de confirmación
+            }
+
+            return RedirectToAction("CierreVenta", new { pedidoId }); // Redirigir al formulario con el estado actualizado
+        }
+    }
+}
