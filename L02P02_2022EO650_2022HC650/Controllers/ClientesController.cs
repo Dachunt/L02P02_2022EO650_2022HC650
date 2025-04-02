@@ -28,7 +28,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             if (ModelState.IsValid)
             {
                 // Aquí no necesitamos asignar valores manualmente para 'Id' ni 'CreatedAt'
-                _context.Clientes.Add(cliente);
+                _context.clientes.Add(cliente);
                 _context.SaveChanges();
 
                 // Guardar el ID del cliente en sesión
@@ -43,14 +43,14 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                     Estado = 'P'  // 'P' para en proceso
                 };
 
-                _context.PedidoEncabezados.Add(pedido);
+                _context.pedido_encabezado.Add(pedido);
                 _context.SaveChanges();
 
                 // Guardar el ID del pedido en sesión
                 HttpContext.Session.SetInt32("PedidoId", pedido.Id);
 
                 // Redirigir al listado de libros
-                return RedirectToAction("ListaLibros", "Libros");
+                return RedirectToAction("ListaLibros", "libros");
             }
 
             return View(cliente);  // Si el modelo no es válido, devolver el formulario
