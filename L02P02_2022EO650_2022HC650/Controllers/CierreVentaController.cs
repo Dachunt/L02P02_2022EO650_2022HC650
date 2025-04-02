@@ -14,7 +14,6 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             _context = context;
         }
 
-        // Acción para mostrar el formulario de cierre de venta
         public IActionResult CierreVenta()
         {
             var clienteId = HttpContext.Session.GetInt32("ClienteId");
@@ -22,7 +21,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             if (clienteId == null || pedidoId == null)
             {
-                return RedirectToAction("Index", "Home"); // Redirigir si no hay cliente o pedido
+                return RedirectToAction("Index", "Home"); 
             }
 
             var cliente = _context.clientes.Find(clienteId);
@@ -30,7 +29,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             if (cliente == null || pedido == null)
             {
-                return RedirectToAction("Index", "Home"); // Redirigir si no se encuentra cliente o pedido
+                return RedirectToAction("Index", "Home"); 
             }
 
             var detallePedidos = _context.pedido_detalle
@@ -39,7 +38,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                                           {
                                               NombreLibro = pd.Libro.nombre,
                                               Precio = pd.Libro.precio,
-                                              Cantidad = 1 // Suponemos que cada detalle es de un solo libro
+                                              Cantidad = 1 
                                           }).ToList();
 
             var cierreVenta = new CierreVenta
@@ -49,14 +48,14 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 Email = cliente.Email,
                 Direccion = cliente.Direccion,
                 DetallePedidos = detallePedidos,
-                Total = detallePedidos.Sum(dp => dp.Precio), // total calculado
+                Total = detallePedidos.Sum(dp => dp.Precio), 
                 PedidoId = pedidoId.Value
             };
 
-            return View(cierreVenta); // Pasamos el modelo a la vista
+            return View(cierreVenta); 
         }
 
-        // Acción para cerrar la venta
+
         [HttpPost]
         public IActionResult CerrarVenta(int pedidoId)
         {
@@ -64,11 +63,11 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             if (pedido != null)
             {
-                _context.SaveChanges(); // Guardar los cambios en la base de datos
-                TempData["Mensaje"] = "Venta cerrada exitosamente."; // Mensaje de confirmación
+                _context.SaveChanges();
+                TempData["Mensaje"] = "Venta cerrada exitosamente.";
             }
 
-            return RedirectToAction("CierreVenta", new { pedidoId }); // Redirigir al formulario con el estado actualizado
+            return RedirectToAction("CierreVenta", new { pedidoId });
         }
     }
 }

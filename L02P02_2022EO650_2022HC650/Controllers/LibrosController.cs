@@ -17,15 +17,12 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             _context = context;
         }
 
-        // Mostrar la lista de libros
         public IActionResult ListaLibros()
         {
             var libros = _context.libros.ToList();
 
-            // Obtener ID del Cliente desde la sesión
             int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
 
-            // Buscar pedido en proceso
             var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id_cliente == idCliente);
             if (pedido != null)
             {
@@ -36,14 +33,11 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             return View(libros);
         }
 
-        // Agregar un libro al carrito
         [HttpPost]
         public IActionResult AgregarAlCarrito(int idLibro)
         {
-            // Obtener ID del Cliente desde la sesión
             int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
 
-            // Buscar pedido en proceso
             var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id_cliente == idCliente);
             if (pedido == null)
             {
@@ -57,14 +51,12 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 _context.SaveChanges();
             }
 
-            // Buscar el libro
             var libro = _context.libros.Find(idLibro);
             if (libro == null)
             {
                 return NotFound("El libro no existe.");
             }
 
-            // Agregar detalle del pedido
             var detalle = new PedidoDetalle
             {
                 id_pedido = pedido.id,
@@ -74,7 +66,6 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             _context.pedido_detalle.Add(detalle);
             _context.SaveChanges();
 
-            // Actualizar totales
             pedido.cantidad_libros++;
             pedido.total += libro.precio;
             _context.SaveChanges();
@@ -86,7 +77,6 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             return RedirectToAction("ListaLibros");
         }
 
-        // Método para completar la compra
         public IActionResult CompletarPedido()
         {
             int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
@@ -98,7 +88,6 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 return RedirectToAction("ListaLibros");
             }
 
-            // Limpiar sesión después de completar la compra
             HttpContext.Session.Remove("TotalLibros");
             HttpContext.Session.Remove("TotalPrecio");
 
