@@ -25,15 +25,15 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 return RedirectToAction("Index", "Home"); // Redirigir si no hay cliente o pedido
             }
 
-            var cliente = _context.Clientes.Find(clienteId);
-            var pedido = _context.PedidoEncabezados.Find(pedidoId);
+            var cliente = _context.clientes.Find(clienteId);
+            var pedido = _context.pedido_encabezado.Find(pedidoId);
 
             if (cliente == null || pedido == null)
             {
                 return RedirectToAction("Index", "Home"); // Redirigir si no se encuentra cliente o pedido
             }
 
-            var detallePedidos = _context.PedidoDetalles
+            var detallePedidos = _context.pedido_detalle
                                           .Where(pd => pd.IdPedido == pedidoId)
                                           .Select(pd => new DetallePedido
                                           {
@@ -60,7 +60,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         [HttpPost]
         public IActionResult CerrarVenta(int pedidoId)
         {
-            var pedido = _context.PedidoEncabezados.Find(pedidoId);
+            var pedido = _context.pedido_encabezado.Find(pedidoId);
 
             if (pedido != null)
             {

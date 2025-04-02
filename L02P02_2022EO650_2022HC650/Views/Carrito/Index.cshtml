@@ -3,18 +3,15 @@
 *@
 @model IEnumerable<L02P02_2022EO650_2022HC650.Models.Libro>
 
-@{
-    ViewBag.Title = "Lista de Libros";
-}
-
-<h2>Lista de Libros</h2>
+<h2>Listado de Libros</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>Imagen</th>
             <th>Nombre</th>
-            <th>Descripción</th>
+            <th>Autor</th>
+            <th>Categoría</th>
             <th>Precio</th>
             <th>Acción</th>
         </tr>
@@ -23,21 +20,30 @@
         @foreach (var libro in Model)
         {
             <tr>
-                <td><img src="@libro.UrlImagen" alt="@libro.Nombre" width="50" height="75"></td>
+                <td>
+                    <img src="@libro.UrlImagen" alt="Imagen del libro" width="50" />
+                </td>
                 <td>@libro.Nombre</td>
-                <td>@libro.Descripcion</td>
+                <td>@libro.IdAutor</td>
+                <td>@libro.IdCategoria</td>
                 <td>$@libro.Precio</td>
                 <td>
-                    @using (Html.BeginForm("AgregarAlCarrito", "Libros", FormMethod.Post))
-                    {
-                        @Html.Hidden("id", libro.Id)
-                        <button type="submit" class="btn btn-success">Agregar al Carrito</button>
-                    }
+                    <form asp-action="AgregarAlCarrito" asp-controller="Libros" method="post">
+                        <input type="hidden" name="idLibro" value="@libro.Id" />
+                        <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a href="@Url.Action("VerCarrito", "Libros")" class="btn btn-primary">Ver Carrito</a>
+<div class="alert alert-info">
+    <strong>Total de Libros en el Carrito: </strong> @ViewBag.TotalLibros <br>
+    <strong>Total a Pagar: </strong> $@ViewBag.TotalPrecio
+</div>
+
+<button class="btn btn-success">Completar Compra</button>
+
+
 
