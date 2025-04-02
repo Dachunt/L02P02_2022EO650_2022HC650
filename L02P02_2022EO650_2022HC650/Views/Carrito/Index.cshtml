@@ -23,14 +23,14 @@
         @foreach (var libro in Model)
         {
             <tr>
-                <td><img src="@libro.url_imagen" alt="@libro.Nombre" width="50" height="75"></td>
-                <td>@libro.Nombre</td>
+                <td><img src="@libro.url_imagen" alt="@libro.nombre" width="50" height="75"></td>
+                <td>@libro.nombre</td>
                 <td>@libro.descripcion</td>
                 <td>$@libro.precio</td>
                 <td>
                     @using (Html.BeginForm("AgregarAlCarrito", "libros", FormMethod.Post))
                     {
-                        @Html.Hidden("id", libro.Id)
+                        @Html.Hidden("id", libro.id)
                         <button type="submit" class="bin btn-success">Agregar al Carrito</button>
                     }
                 </td>
