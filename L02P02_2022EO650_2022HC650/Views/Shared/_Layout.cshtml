@@ -4,12 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - L02P02_2022EO650_2022HC650</title>
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- CSS principal -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Estilos adicionales, si los tienes -->
     <link rel="stylesheet" href="~/L02P02_2022EO650_2022HC650.styles.css" asp-append-version="true" />
+
+    <!-- Sección de estilos adicionales, inyectada desde la vista -->
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
+        <!-- Barra de navegación -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">L02P02_2022EO650_2022HC650</a>
@@ -30,20 +38,27 @@
             </div>
         </nav>
     </header>
+
+    <!-- Contenido principal -->
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            @RenderBody() <!-- Renderiza el contenido de la vista actual -->
         </main>
     </div>
 
+    <!-- Pie de página -->
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - L02P02_2022EO650_2022HC650 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- Scripts de jQuery y Bootstrap -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Sección de scripts adicionales, inyectada desde la vista -->
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

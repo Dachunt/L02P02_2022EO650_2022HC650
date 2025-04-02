@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace L02P02_2022EO650_2022HC650.Models
 {
     public class Cliente
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Esto asegura que el ID sea autoincremental en la base de datos
+        public int id { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -24,6 +26,7 @@ namespace L02P02_2022EO650_2022HC650.Models
         [StringLength(255)]
         public string Direccion { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        // El campo CreatedAt se maneja desde la base de datos, no necesitamos asignarlo manualmente
+        public DateTime created_at { get; set; } = DateTime.Now;  // Este valor ahora será manejado por la base de datos
     }
 }

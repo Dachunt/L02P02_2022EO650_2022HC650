@@ -27,17 +27,17 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         {
             if (ModelState.IsValid)
             {
-                cliente.CreatedAt = DateTime.Now;
+                // Aquí no necesitamos asignar valores manualmente para 'Id' ni 'CreatedAt'
                 _context.Clientes.Add(cliente);
                 _context.SaveChanges();
 
                 // Guardar el ID del cliente en sesión
-                HttpContext.Session.SetInt32("ClienteId", cliente.Id);
+                HttpContext.Session.SetInt32("ClienteId", cliente.id);
 
                 // Crear pedido en proceso con estado 'P'
                 PedidoEncabezado pedido = new PedidoEncabezado
                 {
-                    IdCliente = cliente.Id,
+                    IdCliente = cliente.id,
                     CantidadLibros = 0,
                     Total = 0,
                     Estado = 'P'  // 'P' para en proceso

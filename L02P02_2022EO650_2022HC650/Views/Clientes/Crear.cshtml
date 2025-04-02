@@ -1,48 +1,137 @@
 ﻿@model L02P02_2022EO650_2022HC650.Models.Cliente
 
 @{
-    ViewData["Title"] = "Formulario de Inicio de Venta";
+    ViewData["Title"] = "Venta de Libros";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="libros-container">
+    <h1>Venta de Libros</h1>
 
-<form asp-action="Crear" method="post">
-    <!-- Nombre del cliente -->
-    <div class="form-group">
-        <label asp-for="Nombre" class="control-label"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
-    </div>
+    <h2>Proceso de venta</h2>
+    <h3>Datos del Cliente</h3>
 
-    <!-- Apellido del cliente -->
-    <div class="form-group">
-        <label asp-for="Apellido" class="control-label"></label>
-        <input asp-for="Apellido" class="form-control" />
-        <span asp-validation-for="Apellido" class="text-danger"></span>
-    </div>
+    <form asp-action="Crear" method="post" class="venta-form">
+        <div class="nombre-apellido">
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label">Nombre</label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
 
-    <!-- Correo del cliente -->
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label">Apellido</label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+        </div>
 
-    <!-- Dirección del cliente -->
-    <div class="form-group">
-        <label asp-for="Direccion" class="control-label"></label>
-        <input asp-for="Direccion" class="form-control" />
-        <span asp-validation-for="Direccion" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-    <!-- Botón de registro -->
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Iniciar Venta</button>
+        <div class="form-group">
+            <label asp-for="Direccion" class="control-label">Dirección</label>
+            <input asp-for="Direccion" class="form-control" />
+            <span asp-validation-for="Direccion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-venta">Iniciar Venta</button>
+        </div>
+    </form>
+
+    <div class="alumnos-footer">
+        <div>2022EO650 - Nombre Alumno Uno</div>
+        <div>2022HC650 - Nombre Alumno Dos</div>
     </div>
-</form>
+</div>
+
+@section Styles {
+    <style>
+        .libros-container {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #444;
+            font-size: 20px;
+            margin: 15px 0 10px 0;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 16px;
+            margin: 10px 0 15px 0;
+            font-weight: normal;
+        }
+
+        .venta-form {
+            margin-top: 20px;
+        }
+
+        .nombre-apellido {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+            .nombre-apellido .form-group {
+                flex: 1;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-venta {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+            .btn-venta:hover {
+                background-color: #45a049;
+            }
+
+        .alumnos-footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+            .alumnos-footer div {
+                margin: 5px 0;
+            }
+    </style>
+}
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+} 
