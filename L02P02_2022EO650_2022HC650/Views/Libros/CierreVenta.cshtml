@@ -9,100 +9,170 @@
 
 <!-- Estilos personalizados -->
 <style>
-    .container-custom {
-        max-width: 800px;
-        margin: auto;
-        text-align: center;
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
     }
 
+    /* Encabezado */
     .header {
         background: #1f1f1f;
         color: white;
+        text-align: center;
         padding: 20px;
-        border-radius: 8px;
     }
 
-    .table-container {
-        width: 100%;
-        background: white;
+        .header img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+    /* Contenedor principal */
+    .container-custom {
+        max-width: 1000px;
+        margin: 20px auto;
         padding: 20px;
+        background: white;
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
+    /* Datos del cliente */
+    .cliente-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
     }
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
+        .cliente-info input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+    /* Carrito */
+    .carrito-container {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
     }
 
-    th {
-        background: #343a40;
-        color: white;
-    }
+        .carrito-container h3 {
+            margin-bottom: 15px;
+        }
 
+        .carrito-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .carrito-container th, .carrito-container td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .carrito-container th {
+            background: #343a40;
+            color: white;
+        }
+
+    /* Botón de cerrar venta */
     .btn-cerrar {
-        background-color: #dc3545;
+        background-color: #28a745;
         color: white;
-        padding: 10px 20px;
+        padding: 12px;
         border-radius: 5px;
         border: none;
         cursor: pointer;
         width: 100%;
+        font-size: 16px;
         margin-top: 20px;
     }
 
         .btn-cerrar:hover {
-            background-color: #c82333;
+            background-color: #218838;
         }
+
+    /* Pie de página */
+    .footer {
+        margin-top: 40px;
+        padding: 20px;
+        background: #1f1f1f;
+        color: white;
+        text-align: center;
+        font-size: 14px;
+    }
 </style>
 
-<!-- Encabezado -->
-<div class="header text-center">
-    <h2>Cierre de Venta</h2>
-    <p>Confirme su compra y cierre la venta</p>
-</div>
+<!-- ENCABEZADO -->
 
-<!-- Información del Cliente -->
+<!-- CONTENEDOR PRINCIPAL -->
 <div class="container-custom">
-    <h3>Datos del Cliente</h3>
-    <p><strong>Nombre:</strong> @Model.Cliente.Nombre</p>
-    <p><strong>Correo:</strong> @Model.Cliente.Email</p>
-</div>
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/UNICAES_Logo.png" alt="Logo">
+        <h2>Venta de Libros</h2>
+        <p>Seleccione los libros y posterior ingrese sus datos</p>
+    </div>
+    <div class="row">
+        <!-- DATOS DEL CLIENTE -->
+        <div class="col-md-6">
+            <h3>Proceso de venta</h3>
+            <h4>Datos del Cliente</h4>
+            <div class="cliente-info">
+                <input type="text" value="@Model.Cliente.Nombre" readonly placeholder="Nombre">
+                <input type="text" value="@Model.Cliente.Apellido" readonly placeholder="Apellido">
+                <input type="email" value="@Model.Cliente.Email" readonly placeholder="Email">
+                <input type="text" value="@Model.Cliente.Direccion" readonly placeholder="Dirección">
+            </div>
+        </div>
 
-<!-- Resumen del Pedido -->
-<div class="table-container">
-    <h3>Detalles de la Compra</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Libro</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var detalle in Model.PedidoDetalles)
-            {
-                <tr>
-                    <td>@detalle.Libro.nombre</td>
-                    <td>1</td>
-                    <td>$@detalle.Libro.precio</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <h3>Total: $@Model.total</h3>
-</div>
+        <!-- CARRITO -->
+        <div class="col-md-6 carrito-container">
+            <h3>Carrito <span class="badge badge-primary">@Model.PedidoDetalles.Count</span></h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Libro</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalle in Model.PedidoDetalles)
+                    {
+                        <tr>
+                            <td>@detalle.Libro.nombre</td>
+                            <td>$@detalle.Libro.precio</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h3>Total (USD): <strong>$@Model.total</strong></h3>
 
-<!-- Botón de Cerrar Venta -->
-<form asp-action="CerrarVenta" asp-controller="Libros" method="post">
-    <input type="hidden" name="idPedido" value="@Model.id" />
-    <button type="submit" class="btn-cerrar">Cerrar Venta</button>
-</form>
+            <!-- BOTÓN DE CERRAR VENTA -->
+            <form asp-action="CerrarVenta" asp-controller="Libros" method="post">
+                <input type="hidden" name="idPedido" value="@Model.id" />
+                <button type="submit" class="btn-cerrar">Cerrar venta</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>2022EO650 - Gerson David Espinoza Orellana</div>
+        <div>2022HC650 - Diego Andrés Hernández Contreras</div>
+    </div>
+</div>
