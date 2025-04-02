@@ -14,10 +14,10 @@ namespace L02P02_2022EO650_2022HC650.Models
         // Detalle de los libros en el carrito
         public List<DetallePedido> DetallePedidos { get; set; } = new List<DetallePedido>();
 
-        // Total a pagar
+        // total a pagar
         public decimal Total { get; set; }
 
-        // El Id del Pedido
+        // El id del Pedido
         public int PedidoId { get; set; }
     }
 

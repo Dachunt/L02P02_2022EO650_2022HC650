@@ -29,10 +29,10 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             int idCliente = 1;
             var pedido = _context.pedido_encabezado
-                .FirstOrDefault(p => p.IdCliente == idCliente && p.Estado == 'P');
+                .FirstOrDefault(p => p.id_cliente == idCliente);
 
-            ViewBag.TotalLibros = pedido?.CantidadLibros ?? 0;
-            ViewBag.TotalPrecio = pedido?.Total ?? 0;
+            ViewBag.TotalLibros = pedido?.cantidad_libros ?? 0;
+            ViewBag.TotalPrecio = pedido?.total ?? 0;
 
             return View(libros);
         }
@@ -43,15 +43,15 @@ namespace L02P02_2022EO650_2022HC650.Controllers
             int idCliente = 1;
 
             var pedido = _context.pedido_encabezado
-                .FirstOrDefault(p => p.IdCliente == idCliente && p.Estado == 'P');
+                .FirstOrDefault(p => p.id_cliente == idCliente);
 
             if (pedido == null)
             {
                 pedido = new PedidoEncabezado
                 {
-                    IdCliente = idCliente,
-                    CantidadLibros = 0,
-                    Total = 0
+                    id_cliente = idCliente,
+                    cantidad_libros = 0,
+                    total = 0
                 };
                 _context.pedido_encabezado.Add(pedido);
                 _context.SaveChanges();
@@ -59,15 +59,15 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             var detalle = new PedidoDetalle
             {
-                IdPedido = pedido.Id,
+                IdPedido = pedido.id,
                 IdLibro = idLibro,
                 CreatedAt = DateTime.Now
             };
             _context.pedido_detalle.Add(detalle);
             _context.SaveChanges();
 
-            pedido.CantidadLibros++;
-            pedido.Total += _context.libros.Find(idLibro)?.Precio ?? 0;
+            pedido.cantidad_libros++;
+            pedido.total += _context.libros.Find(idLibro)?.Precio ?? 0;
             _context.SaveChanges();
 
             return RedirectToAction("Index");

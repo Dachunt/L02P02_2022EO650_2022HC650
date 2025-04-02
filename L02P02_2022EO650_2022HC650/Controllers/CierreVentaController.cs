@@ -49,7 +49,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 Email = cliente.Email,
                 Direccion = cliente.Direccion,
                 DetallePedidos = detallePedidos,
-                Total = detallePedidos.Sum(dp => dp.Precio), // Total calculado
+                Total = detallePedidos.Sum(dp => dp.Precio), // total calculado
                 PedidoId = pedidoId.Value
             };
 
@@ -64,7 +64,6 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             if (pedido != null)
             {
-                pedido.Estado = 'C'; // Cambiar el estado a 'C' (CERRADO)
                 _context.SaveChanges(); // Guardar los cambios en la base de datos
                 TempData["Mensaje"] = "Venta cerrada exitosamente."; // Mensaje de confirmación
             }

@@ -27,7 +27,7 @@ namespace L02P02_2022EO650_2022HC650.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Aquí no necesitamos asignar valores manualmente para 'Id' ni 'CreatedAt'
+                // Aquí no necesitamos asignar valores manualmente para 'id' ni 'CreatedAt'
                 _context.clientes.Add(cliente);
                 _context.SaveChanges();
 
@@ -37,17 +37,16 @@ namespace L02P02_2022EO650_2022HC650.Controllers
                 // Crear pedido en proceso con estado 'P'
                 PedidoEncabezado pedido = new PedidoEncabezado
                 {
-                    IdCliente = cliente.id,
-                    CantidadLibros = 0,
-                    Total = 0,
-                    Estado = 'P'  // 'P' para en proceso
+                    id_cliente = cliente.id,
+                    cantidad_libros = 0,
+                    total = 0
                 };
 
                 _context.pedido_encabezado.Add(pedido);
                 _context.SaveChanges();
 
                 // Guardar el ID del pedido en sesión
-                HttpContext.Session.SetInt32("PedidoId", pedido.Id);
+                HttpContext.Session.SetInt32("PedidoId", pedido.id);
 
                 // Redirigir al listado de libros
                 return RedirectToAction("ListaLibros", "libros");
