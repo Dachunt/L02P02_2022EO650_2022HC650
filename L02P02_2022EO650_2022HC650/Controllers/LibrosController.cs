@@ -4,6 +4,7 @@ using L02P02_2022EO650_2022HC650.Data;
 using L02P02_2022EO650_2022HC650.Models;
 using System.Linq;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace L02P02_2022EO650_2022HC650.Controllers
 {
@@ -103,6 +104,39 @@ namespace L02P02_2022EO650_2022HC650.Controllers
 
             TempData["MensajeExito"] = "Compra completada con éxito.";
             return RedirectToAction("ListaLibros");
+        }
+
+        public IActionResult CierreVenta()
+        {
+            int idCliente = HttpContext.Session.GetInt32("ClienteId") ?? 1;
+
+            var pedido = _context.pedido_encabezado
+                .Include(p => p.Cliente)
+                .Include(p => p.PedidoDetalles)
+                    .ThenInclude(d => d.Libro)
+                .FirstOrDefault(p => p.id_cliente == idCliente && p.estado == 'P');
+
+            if (pedido == null)
+            {
+                return RedirectToAction("ListaLibros", "Libros");
+            }
+
+            return View(pedido);
+        }
+
+        [HttpPost]
+        public IActionResult CerrarVenta(int idPedido)
+        {
+            var pedido = _context.pedido_encabezado.FirstOrDefault(p => p.id == idPedido);
+
+            if (pedido != null)
+            {
+                pedido.estado = 'C'; 
+                _context.SaveChanges();
+                TempData["Mensaje"] = "Venta cerrada exitosamente.";
+            }
+
+            return RedirectToAction("ListaLibros", "Libros");
         }
     }
 }

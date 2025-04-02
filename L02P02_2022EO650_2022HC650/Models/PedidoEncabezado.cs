@@ -17,6 +17,8 @@ namespace L02P02_2022EO650_2022HC650.Models
 
         public Cliente Cliente { get; set; }
 
+        public char estado { get; set; } = 'P';
+
         // Relación de navegación a PedidoDetalle (un PedidoEncabezado tiene muchos PedidoDetalles)
         public ICollection<PedidoDetalle> PedidoDetalles { get; set; }
     }
